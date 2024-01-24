@@ -204,22 +204,6 @@ const datasetView = () =>
               // Write main derived variable and set to ready
               this.displayData = disp_dataset;
               this.display_ready = true;
-
-              // Add json-ld data to head
-              var scripttag = document.getElementById("structured-data")
-              if (!scripttag) {
-                scripttag = document.createElement("script");
-                scripttag.setAttribute("type", "application/ld+json");
-                scripttag.setAttribute("id", "structured-data");
-                document.head.appendChild(scripttag);
-              }
-              obj = {
-                  "@context": "https://schema.org/",
-                  "@type": "Dataset",
-                  "name": this.displayData.display_name ? this.displayData.display_name : "",
-                  "description": this.selectedDataset.description ? this.selectedDataset.description : ""
-              }
-              scripttag.textContent = JSON.stringify(obj);
             }
           },
         },
@@ -621,6 +605,16 @@ const datasetView = () =>
             : [];
           this.dataset_ready = true;
 
+          // Add json-ld data to head
+          var scripttag = document.getElementById("structured-data")
+          obj = {
+              "@context": "https://schema.org/",
+              "@type": "Dataset",
+              "name": this.$root.selectedDataset.name,
+              "description": this.$root.selectedDataset.description ? this.$root.selectedDataset.description : ""
+          }
+          scripttag.textContent = JSON.stringify(obj);
+
           if (
             this.$root.selectedDataset.hasOwnProperty("subdatasets") &&
             this.$root.selectedDataset.subdatasets instanceof Array &&
@@ -774,6 +768,15 @@ const datasetView = () =>
           text = await response.text();
           app.selectedDataset = JSON.parse(text);
           this.dataset_ready = true;
+          // Add json-ld data to head
+          var scripttag = document.getElementById("structured-data")
+          obj = {
+              "@context": "https://schema.org/",
+              "@type": "Dataset",
+              "name": app.selectedDataset.name,
+              "description": app.selectedDataset.description ? app.selectedDataset.description : ""
+          }
+          scripttag.textContent = JSON.stringify(obj);
           if (
             this.$root.selectedDataset.hasOwnProperty("subdatasets") &&
             this.$root.selectedDataset.subdatasets instanceof Array &&
